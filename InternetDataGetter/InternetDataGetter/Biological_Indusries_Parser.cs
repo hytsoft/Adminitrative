@@ -16,8 +16,31 @@ namespace InternetDataGetter
             HtmlDocument entirePage = DataGetter.GetHtmlpage(uri);
             //string productName = GetProductName(entirePage, "//h2[@class='product-name']");
             //string description = GetDescription(entirePage, "//meta[@name='description']");
-            specifications Specifications = GetSpecifications(entirePage, "//td[@class='data']");
+            //specifications Specifications = GetSpecifications(entirePage, "//td[@class='data']");
+            List<string> productUris = GetProductUris(entirePage, "//li");
+        }
 
+        private static List<string> GetProductUris(HtmlDocument page, string element)
+        {
+            List<string> elements = new List<string>();
+            elements.Add(element);
+            List<KeyValuePair<string, HtmlNodeCollection>> htmlProductUris = DataGetter.GetDataByXPATH(page, elements);
+            KeyValuePair<string, HtmlNodeCollection>  ProductUrisNode = htmlProductUris[0];
+            HtmlNodeCollection HtmlCategoryUris = ProductUrisNode.Value;
+            List<string> ProductCategoryUris = new List<string>();
+            foreach (HtmlNode HtmlCategoryUri in HtmlCategoryUris)
+            {
+                string curr_InnerHtml = HtmlCategoryUri.InnerHtml;
+                curr_InnerHtml = curr_InnerHtml.Trim();
+                if (HtmlCategoryUri.InnerHtml.Contains("<a href="))
+                {
+                    ProductCategoryUris.Add(HtmlCategoryUri.InnerHtml);
+                }
+                
+
+            }
+
+            return ProductCategoryUris;
         }
 
         private static string GetProductName(HtmlDocument page, string element)
@@ -57,10 +80,10 @@ namespace InternetDataGetter
             specifications specifications = new specifications();
             List<string> elements = new List<string>();
             elements.Add(element);
-            List<KeyValuePair<string, HtmlNodeCollection>> htmlspecifications = DataGetter.GetDataByXPATH(page, elements);
-            HtmlNode Form = htmlspecifications[0].Value[0];
-            HtmlNode Storage_Conditions = htmlspecifications[0].Value[1];
-            HtmlNode Quality_Control = htmlspecifications[0].Value[2];
+            List<KeyValuePair<string, HtmlNodeCollection>> htmlSpecifications = DataGetter.GetDataByXPATH(page, elements);
+            HtmlNode Form = htmlSpecifications[0].Value[0];
+            HtmlNode Storage_Conditions = htmlSpecifications[0].Value[1];
+            HtmlNode Quality_Control = htmlSpecifications[0].Value[2];
             specifications.form = Form.InnerText; ;
             specifications.storage_conditions = Storage_Conditions.InnerText;
             specifications.quality_control = Quality_Control.InnerText;

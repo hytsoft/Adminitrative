@@ -157,7 +157,7 @@ namespace InternetDataGetter
             //}
             #endregion
 
-            Uri test_uri = new Uri("http://www.bioind.com/bio-pure-human-serum-albumin-hsa/");
+            Uri test_uri = new Uri("http://www.bioind.com/israel/products/");
             BiologicalIndusriesParser.Parse(test_uri);
 
         }
